@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { css } from "styled-components";
 import { KeyState } from "../../constants";
 
 const Root = styled.div`
   flex: 1;
+  display: flex;
+  padding: 20px;
 `;
 
 const Container = styled.div`
-  padding: 5px;
   max-width: 400px;
+  width: 100%;
   margin: auto;
 `;
 
@@ -20,7 +23,7 @@ const Letter = styled.div`
   flex: 1;
   min-height: ${({ height }) => `${height}px`};
   max-height: ${({ height }) => `${height}px`};
-  padding: 2.5px;
+  padding: 5px;
   display: flex;
   perspective: 1000px;
   background-color: transparent;
@@ -41,6 +44,7 @@ const FlipCardInner = styled.div`
 `;
 
 const FlipCardStyles = styled.div`
+  border-radius: 5px;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -50,28 +54,25 @@ const FlipCardStyles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: black;
+  font-weight: 600;
+  font-size: 1.2rem;
 `;
 
 const FlipCardFront = styled(FlipCardStyles)`
-  background-color: #bbb;
+${({ status, theme }) => css`
+  background-color: ${theme.KEYS.BACKGROUND[KeyState.UNVERIFIED]};
+  color: ${theme.KEYS.TEXT[KeyState.UNVERIFIED]};
+  border: 2px solid ${theme.KEYS.BORDER[KeyState.UNVERIFIED]};
+`}
 }
 `;
 
 const FlipCardBack = styled(FlipCardStyles)`
-  background-color: ${({ status }) => {
-    switch (status) {
-      case KeyState.ABSENT:
-        return "red";
-      case KeyState.MISPLACED:
-        return "yellow";
-      case KeyState.PLACED:
-        return "green";
-      default:
-        return "none";
-    }
-  }};
-
+  ${({ status, theme }) => css`
+    background-color: ${theme.KEYS.BACKGROUND[status] ||
+    theme.KEYS.BACKGROUND[KeyState.UNVERIFIED]};
+    color: ${theme.KEYS.TEXT[status] || theme.KEYS.TEXT[KeyState.UNVERIFIED]};
+  `}
   transform: rotateY(180deg);
 `;
 

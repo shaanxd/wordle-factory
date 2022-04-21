@@ -13,8 +13,14 @@ const slice = createSlice({
     createSolution: (state, { payload: { id, solution } }) => {
       state.wordles[id] = { status: SolvedState.UNSOLVED, solution };
     },
-    updateSolution: (state, { payload: { id, solution } }) => {
-      state.wordles[id].solution = solution;
+    updateSolution: (
+      state,
+      { payload: { id, solution, status = SolvedState.UNSOLVED } }
+    ) => {
+      state.wordles[id] = {
+        solution,
+        status,
+      };
     },
   },
 });

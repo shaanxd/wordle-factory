@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { css } from "styled-components";
 
 const Container = styled.div`
   display: flex;
@@ -7,14 +8,34 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 4px 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.3rem;
+
+  ${({ theme }) => css`
+    color: ${theme.NUMBER_PICKER.BUTTON.TEXT};
+    background-color: ${theme.NUMBER_PICKER.BUTTON.BACKGROUND};
+  `};
 `;
 
 const Label = styled.div`
-  margin: auto 10px;
+  margin: auto 20px;
+
+  ${({ theme }) => css`
+    color: ${theme.NUMBER_PICKER.TEXT};
+  `};
 `;
 
-function NumberPicker({ value, onValueChange, maxValue, minValue, step }) {
+function NumberPicker({
+  value,
+  onValueChange,
+  maxValue,
+  minValue,
+  step,
+  disabled,
+}) {
   function handleOnIncrement() {
     const updated = value + step;
 
@@ -29,11 +50,11 @@ function NumberPicker({ value, onValueChange, maxValue, minValue, step }) {
 
   return (
     <Container>
-      <Button type="button" onClick={handleOnDecrement}>
+      <Button type="button" onClick={handleOnDecrement} disabled={disabled}>
         -
       </Button>
       <Label>{value}</Label>
-      <Button type="button" onClick={handleOnIncrement}>
+      <Button type="button" onClick={handleOnIncrement} disabled={disabled}>
         +
       </Button>
     </Container>
@@ -46,6 +67,7 @@ NumberPicker.defaultProps = {
   value: 0,
   onValueChange: () => {},
   step: 1,
+  disabled: false,
 };
 
 export default NumberPicker;

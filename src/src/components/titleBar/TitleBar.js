@@ -1,14 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { css } from "styled-components";
 
 const Container = styled.div`
-  padding: 30px 10px;
+  padding: 10px;
+  padding-top: 15px;
   display: flex;
-  font-size: 1.5rem;
+
+  ${({ theme }) => css`
+    background-color: ${theme.TITLE_BAR.BACKGROUND};
+    border-bottom: 1px solid ${theme.TITLE_BAR.BORDER};
+  `}
 `;
 
 const Title = styled.div`
+  font-weight: 600;
   margin: auto;
+  font-size: 2rem;
+  font-family: Comfortaa;
+  color: ${({ theme }) => theme.TITLE_BAR.TEXT};
 `;
 
 function TitleBar({ title }) {

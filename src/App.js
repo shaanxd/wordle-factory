@@ -14,13 +14,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  background-color: ${({ theme }) => theme.BACKDROP.BACKGROUND};
 `;
 
 const Inner = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 500px;
   flex: 1;
 `;
 
