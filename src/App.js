@@ -20,7 +20,7 @@ const Inner = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   flex: 1;
 `;
 

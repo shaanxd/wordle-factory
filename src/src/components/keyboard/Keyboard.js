@@ -14,7 +14,7 @@ const Row = styled.div`
 
 const Button = styled.button`
   flex: 1;
-  margin: 5px;
+  margin: 2.5px;
   padding: 20px 4px;
   font-size: 12px;
 `;
@@ -40,15 +40,27 @@ const Keys = [
 function Keyboard({ onKeyPress, onDelete, onSubmit }) {
   return (
     <Container>
-      {Keys.map((row) => (
-        <Row>
-          {row.map((key) =>
+      {Keys.map((row, rowIdx) => (
+        <Row key={rowIdx}>
+          {row.map((key, colIdx) =>
             key === SPACE ? (
-              <Space />
+              <Space key={`${rowIdx}-${colIdx}`} />
             ) : [ENTER, DELETE].includes(key) ? (
-              <SpecialButton>{key}</SpecialButton>
+              <SpecialButton
+                key={`${rowIdx}-${colIdx}`}
+                onClick={key === DELETE ? onDelete : onSubmit}
+              >
+                {key}
+              </SpecialButton>
             ) : (
-              <Button>{key}</Button>
+              <Button
+                key={`${rowIdx}-${colIdx}`}
+                onClick={() => {
+                  onKeyPress(key);
+                }}
+              >
+                {key}
+              </Button>
             )
           )}
         </Row>
