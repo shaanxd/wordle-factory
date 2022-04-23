@@ -47,11 +47,19 @@ const Theme = {
       BUTTON: {
         TEXT: COLORS.WHITE,
         BACKGROUND: COLORS.GRAY,
+        BACKGROUND_CLICK: COLORS.SUCCESS,
       },
     },
     BUTTON: {
-      TEXT: COLORS.WHITE,
-      BACKGROUND: COLORS.GRAY,
+      DEFAULT: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.GRAY,
+      },
+      SUCCESS: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.SUCCESS,
+      },
+      SPINNER: COLORS.WHITE,
     },
     KEYS: {
       BACKGROUND: {

@@ -1,10 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
+import { v4 } from "uuid";
+import { SyncLoader } from "react-spinners";
 
 import { TitleBar, NumberPicker } from "../../components";
 import { css } from "styled-components";
+import { createWordle } from "../../firebase/wordle";
+import { getEncryptedWord } from "../../utils/encryption";
+import { withTheme } from "styled-components";
+import { BsCheckLg } from "react-icons/bs";
 
 const Container = styled.div`
   flex: 1;
@@ -34,6 +40,7 @@ const StyledField = styled(Field)`
   font-size: 1.2rem;
   padding: 10px 5px;
   border: none;
+  text-transform: uppercase;
 
   &:focus {
     outline: none;
@@ -46,12 +53,20 @@ const StyledField = styled(Field)`
   `};
 `;
 
-const Label = styled.div`
-  margin: 30px 0px 10px 0px;
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+`;
 
+const Label = styled.div`
   ${({ theme }) => css`
     color: ${theme.LABEL.TEXT};
   `};
+`;
+
+const ButtonLabel = styled.span`
+  margin-right: 10px;
 `;
 
 const Submit = styled.button`
@@ -60,10 +75,13 @@ const Submit = styled.button`
   border: none;
   border-radius: 5px;
   font-size: 1.3rem;
+  transition: background-color 0.3s ease-in-out;
 
-  ${({ theme }) => css`
-    color: ${theme.BUTTON.TEXT};
-    background-color: ${theme.BUTTON.BACKGROUND};
+  ${({ theme, success }) => css`
+    color: ${success ? theme.BUTTON.SUCCESS.TEXT : theme.BUTTON.DEFAULT.TEXT};
+    background-color: ${success
+      ? theme.BUTTON.SUCCESS.BACKGROUND
+      : theme.BUTTON.DEFAULT.BACKGROUND};
   `};
 `;
 
@@ -79,8 +97,35 @@ const Error = styled.div`
   `};
 `;
 
-function CreateWordle() {
+const Subtitle = styled.div`
+  font-size: 14px;
+  text-align: justify;
+
+  ${({ theme }) => css`
+    color: ${theme.LABEL.TEXT};
+  `}
+`;
+
+function CreateWordle({ theme }) {
   const formikRef = useRef();
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(null);
+
+  async function handleOnSubmit({ wordle, ...rest }) {
+    try {
+      setLoading(true);
+      const id = v4();
+
+      await createWordle(id, {
+        id,
+        wordle: getEncryptedWord(wordle.toUpperCase()).toString(),
+        ...rest,
+      });
+      setSuccess(id);
+    } catch (err) {}
+    setLoading(false);
+  }
 
   function handleOnCountChange(number) {
     formikRef.current.setFieldValue("attempts", number);
@@ -88,36 +133,61 @@ function CreateWordle() {
 
   return (
     <Container>
-      <TitleBar title="Create Wordle" />
+      <TitleBar title="Wordlab" />
       <ContentContainer>
         <Formik
           initialValues={{ attempts: 3, wordle: "" }}
           innerRef={formikRef}
           validationSchema={Yup.object({
             wordle: Yup.string()
-              .required("Wordle is required.")
-              .max(10, "The wordle cannot exceed 10 characters.")
-              .min(4, "The wordle should contain atleast 4 characters."),
+              .required("Word is required.")
+              .max(10, "Word cannot exceed 10 characters.")
+              .min(4, "Word should contain atleast 4 characters."),
           })}
+          onSubmit={handleOnSubmit}
         >
           {({ values: { attempts }, submitForm }) => (
             <Form>
-              <Label>Wordle</Label>
-              <StyledField name="wordle" />
-              <ErrorMessage
-                name="wordle"
-                render={(message) => <Error>{message}</Error>}
-              />
-              <Label>No. of attempts</Label>
-              <NumberPicker
-                value={attempts}
-                onValueChange={handleOnCountChange}
-                step={1}
-                minValue={3}
-                maxValue={10}
-              />
-              <Submit type="button" onClick={submitForm}>
-                Create
+              <Subtitle>
+                Looking to challenge your friends with a small brain teaser? Go
+                ahead and create a the challenge. You can define the word to be
+                guessed, and the no. of attempts and voila!
+              </Subtitle>
+              <InputContainer>
+                <Label>Word*</Label>
+                <StyledField name="wordle" disabled={loading} />
+                <ErrorMessage
+                  name="wordle"
+                  render={(message) => <Error>{message}</Error>}
+                />
+              </InputContainer>
+              <InputContainer>
+                <Label>No. of attempts*</Label>
+                <NumberPicker
+                  value={attempts}
+                  onValueChange={handleOnCountChange}
+                  step={1}
+                  minValue={3}
+                  maxValue={10}
+                  disabled={loading}
+                />
+              </InputContainer>
+              <Submit
+                type="button"
+                onClick={submitForm}
+                success={success}
+                disabled={loading}
+              >
+                {loading ? (
+                  <SyncLoader size={10} color={theme.BUTTON.SPINNER} />
+                ) : success ? (
+                  <>
+                    <ButtonLabel>Success</ButtonLabel>
+                    <BsCheckLg size={15} />
+                  </>
+                ) : (
+                  "Create"
+                )}
               </Submit>
             </Form>
           )}
@@ -127,4 +197,4 @@ function CreateWordle() {
   );
 }
 
-export default CreateWordle;
+export default withTheme(CreateWordle);

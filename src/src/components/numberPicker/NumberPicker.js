@@ -17,11 +17,18 @@ const Button = styled.button`
   ${({ theme }) => css`
     color: ${theme.NUMBER_PICKER.BUTTON.TEXT};
     background-color: ${theme.NUMBER_PICKER.BUTTON.BACKGROUND};
+
+    &:active {
+      background-color: ${theme.NUMBER_PICKER.BUTTON.BACKGROUND_CLICK};
+    }
   `};
 `;
 
 const Label = styled.div`
-  margin: auto 20px;
+  min-width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${({ theme }) => css`
     color: ${theme.NUMBER_PICKER.TEXT};

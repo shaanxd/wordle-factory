@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { Keyboard, TitleBar, Wordle } from "../../components";
 import { KeyMappings, KeyState, SolvedState } from "../../constants";
+import { getWordle } from "../../firebase/wordle";
 import { createSolution, updateSolution } from "../../reducer/data";
+import { getDecryptedWord } from "../../utils/encryption";
 
 const Container = styled.div`
   flex: 1;
@@ -33,16 +36,11 @@ const WordleContainer = styled.div`
   overflow: auto;
 `;
 
-const sample = {
-  attempts: 5,
-  wordle: "HELLO",
-  id: "sample",
-};
-
 function SolveWordle() {
   const dispatch = useDispatch();
+  const { wordleId } = useParams();
 
-  const [challenge, setChallenge] = useState(sample);
+  const [challenge, setChallenge] = useState(null);
   const [solution, setSolution] = useState([]);
   const [row, setRow] = useState(0);
   const [keyboardStatusMap, setKeyboardStatusMap] = useState({});
@@ -50,6 +48,29 @@ function SolveWordle() {
   const storedSolution = useSelector(
     (state) => state.data.wordles[challenge?.id]
   );
+
+  async function fetchChallenge() {
+    if (!wordleId) {
+      return;
+    }
+    try {
+      const { wordle, ...rest } = await getWordle(wordleId);
+
+      const decryptedWord = getDecryptedWord(wordle);
+
+      setChallenge({
+        ...rest,
+        wordle: decryptedWord,
+      });
+    } catch (error) {
+      console.log("[X]", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchChallenge();
+    //  eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (!storedSolution) {
@@ -190,7 +211,7 @@ function SolveWordle() {
     setKeyboardStatusMap(map);
     //  eslint-disable-next-line
   }, [storedSolution]);
-
+  console.log("[X]", challenge);
   return (
     <Container>
       <TitleBar title="Wordlab" />
