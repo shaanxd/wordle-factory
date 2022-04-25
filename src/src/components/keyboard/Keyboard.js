@@ -29,7 +29,6 @@ const Button = styled.button`
   font-weight: 600;
   border: 1px solid #d2d2d2;
   border-radius: 5px;
-  transition: background-color 0.3s ease-in-out;
 
   ${({ status, theme }) => css`
     background-color: ${theme.KEYS.BACKGROUND[status] ||

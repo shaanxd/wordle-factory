@@ -2,6 +2,8 @@ export const SolvedState = {
   UNSOLVED: "UNSOLVED",
   SOLVING: "SOLVING",
   SOLVED: "SOLVED",
+  COMPLETED_SUCCESSFULLY: "COMPLETED_SUCCESSFULLY",
+  COMPLETED_UNSUCCESSFULLY: "COMPLETED_UNSUCCESSFULLY",
 };
 
 export const KeyState = {
@@ -9,6 +11,12 @@ export const KeyState = {
   MISPLACED: "MISPLACED",
   ABSENT: "ABSENT",
   UNVERIFIED: "UNVERIFIED",
+};
+
+export const KeyStateEmotes = {
+  [KeyState.PLACED]: "🟩",
+  [KeyState.MISPLACED]: "🟨",
+  [KeyState.ABSENT]: "🟥",
 };
 
 export const KeyMappings = {

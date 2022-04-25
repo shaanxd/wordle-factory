@@ -5,12 +5,13 @@ import * as Yup from "yup";
 import { v4 } from "uuid";
 import { SyncLoader } from "react-spinners";
 
-import { TitleBar, NumberPicker } from "../../components";
+import { TitleBar, NumberPicker, CreationSuccessModal } from "../../components";
 import { css } from "styled-components";
 import { createWordle } from "../../firebase/wordle";
 import { getEncryptedWord } from "../../utils/encryption";
 import { withTheme } from "styled-components";
 import { BsCheckLg } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   flex: 1;
@@ -74,8 +75,6 @@ const Submit = styled.button`
   padding: 15px;
   border: none;
   border-radius: 5px;
-  font-size: 1.3rem;
-  transition: background-color 0.3s ease-in-out;
 
   ${({ theme, success }) => css`
     color: ${success ? theme.BUTTON.SUCCESS.TEXT : theme.BUTTON.DEFAULT.TEXT};
@@ -110,7 +109,7 @@ function CreateWordle({ theme }) {
   const formikRef = useRef();
 
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(null);
+  const [url, setUrl] = useState(null);
 
   async function handleOnSubmit({ wordle, ...rest }) {
     try {
@@ -122,13 +121,22 @@ function CreateWordle({ theme }) {
         wordle: getEncryptedWord(wordle.toUpperCase()).toString(),
         ...rest,
       });
-      setSuccess(id);
-    } catch (err) {}
+      setUrl(`${window.location.origin}/wordle/${id}`);
+    } catch (err) {
+      toast("Error occurred while creating the challenge.", {
+        progressStyle: { backgroundColor: theme.TOAST.PROGRESS.ERROR },
+      });
+    }
     setLoading(false);
   }
 
   function handleOnCountChange(number) {
     formikRef.current.setFieldValue("attempts", number);
+  }
+
+  function handleOnReset() {
+    setUrl(null);
+    formikRef.current?.resetForm?.();
   }
 
   return (
@@ -149,9 +157,9 @@ function CreateWordle({ theme }) {
           {({ values: { attempts }, submitForm }) => (
             <Form>
               <Subtitle>
-                Looking to challenge your friends with a small brain teaser? Go
-                ahead and create a the challenge. You can define the word to be
-                guessed, and the no. of attempts and voila!
+                Looking to challenge your friends with a brain teaser? Go ahead
+                and create a challenge. You can define the word to be guessed,
+                the no. of attempts and voila!
               </Subtitle>
               <InputContainer>
                 <Label>Word*</Label>
@@ -175,15 +183,15 @@ function CreateWordle({ theme }) {
               <Submit
                 type="button"
                 onClick={submitForm}
-                success={success}
+                success={url}
                 disabled={loading}
               >
                 {loading ? (
                   <SyncLoader size={10} color={theme.BUTTON.SPINNER} />
-                ) : success ? (
+                ) : url ? (
                   <>
                     <ButtonLabel>Success</ButtonLabel>
-                    <BsCheckLg size={15} />
+                    <BsCheckLg size={12} color={theme.BUTTON.SUCCESS.TEXT} />
                   </>
                 ) : (
                   "Create"
@@ -193,6 +201,7 @@ function CreateWordle({ theme }) {
           )}
         </Formik>
       </ContentContainer>
+      <CreationSuccessModal url={url} onReset={handleOnReset} />
     </Container>
   );
 }

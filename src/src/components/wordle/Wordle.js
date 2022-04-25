@@ -6,7 +6,7 @@ import { KeyState } from "../../constants";
 const Root = styled.div`
   flex: 1;
   display: flex;
-  padding: 20px;
+  padding: 5px;
 `;
 
 const Container = styled.div`
@@ -23,7 +23,7 @@ const Letter = styled.div`
   flex: 1;
   min-height: ${({ height }) => `${height}px`};
   max-height: ${({ height }) => `${height}px`};
-  padding: 5px;
+  padding: 2.5px;
   display: flex;
   perspective: 1000px;
   background-color: transparent;
@@ -55,7 +55,7 @@ const FlipCardStyles = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 `;
 
 const FlipCardFront = styled(FlipCardStyles)`

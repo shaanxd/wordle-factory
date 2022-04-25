@@ -1,9 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { FiBarChart2 } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import styled from "styled-components";
+import { css } from "styled-components";
+import { withTheme } from "styled-components";
 
-import { Keyboard, TitleBar, Wordle } from "../../components";
+import {
+  Keyboard,
+  SolutionResultModal,
+  TitleBar,
+  Wordle,
+} from "../../components";
 import { KeyMappings, KeyState, SolvedState } from "../../constants";
 import { getWordle } from "../../firebase/wordle";
 import { createSolution, updateSolution } from "../../reducer/data";
@@ -13,8 +22,26 @@ const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   background-color: ${({ theme }) => theme.SCREEN.BACKGROUND};
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${({ theme }) => css`
+    background: ${theme.LOADER.BACKGROUND};
+    color: ${theme.LOADER.TEXT};
+  `}
 `;
 
 const ContentContainer = styled.div`
@@ -36,14 +63,39 @@ const WordleContainer = styled.div`
   overflow: auto;
 `;
 
-function SolveWordle() {
+const OverlayError = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  font-size: 1.1rem;
+  text-align: center;
+`;
+
+const Retry = styled.button`
+  margin-top: 20px;
+  padding: 15px;
+  border: none;
+  display: flex;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+
+  ${({ theme }) => css`
+    color: ${theme.BUTTON.DEFAULT.TEXT};
+    background-color: ${theme.BUTTON.DEFAULT.BACKGROUND};
+  `};
+`;
+
+function SolveWordle({ theme }) {
   const dispatch = useDispatch();
   const { wordleId } = useParams();
 
   const [challenge, setChallenge] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [solution, setSolution] = useState([]);
   const [row, setRow] = useState(0);
   const [keyboardStatusMap, setKeyboardStatusMap] = useState({});
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const storedSolution = useSelector(
     (state) => state.data.wordles[challenge?.id]
@@ -54,6 +106,8 @@ function SolveWordle() {
       return;
     }
     try {
+      setLoading(true);
+
       const { wordle, ...rest } = await getWordle(wordleId);
 
       const decryptedWord = getDecryptedWord(wordle);
@@ -65,6 +119,7 @@ function SolveWordle() {
     } catch (error) {
       console.log("[X]", error);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -81,12 +136,16 @@ function SolveWordle() {
       JSON.stringify(storedSolution.solution)
     );
 
-    const row =
-      storedSolution.status === SolvedState.SOLVED
-        ? -1
-        : clonedStoredSolution.findIndex((row) => row.length === 0);
+    const isChallengeSolved =
+      storedSolution.status === SolvedState.COMPLETED_SUCCESSFULLY ||
+      storedSolution.status === SolvedState.COMPLETED_UNSUCCESSFULLY;
+
+    const row = isChallengeSolved
+      ? -1
+      : clonedStoredSolution.findIndex((row) => row.length === 0);
 
     setSolution(JSON.parse(JSON.stringify(storedSolution.solution)));
+    setModalVisible(isChallengeSolved);
     setRow(row);
   }, [storedSolution]);
 
@@ -118,7 +177,9 @@ function SolveWordle() {
         id,
         solution: updated,
         status: updated[row].every(({ status }) => status === KeyState.PLACED)
-          ? SolvedState.SOLVED
+          ? SolvedState.COMPLETED_SUCCESSFULLY
+          : row === updated.length - 1
+          ? SolvedState.COMPLETED_UNSUCCESSFULLY
           : SolvedState.SOLVING,
       })
     );
@@ -211,15 +272,46 @@ function SolveWordle() {
     setKeyboardStatusMap(map);
     //  eslint-disable-next-line
   }, [storedSolution]);
-  console.log("[X]", challenge);
+
+  function handleOnModalClose() {
+    setModalVisible(false);
+  }
+
+  function handleOnModalClick() {
+    setModalVisible(true);
+  }
+
+  const isChallengeSolved =
+    storedSolution?.status === SolvedState.COMPLETED_SUCCESSFULLY ||
+    storedSolution?.status === SolvedState.COMPLETED_UNSUCCESSFULLY;
+
   return (
     <Container>
-      <TitleBar title="Wordlab" />
+      <TitleBar
+        title="Wordlab"
+        rightIcon={isChallengeSolved && <FiBarChart2 size={25} />}
+        onRightIconClick={isChallengeSolved && handleOnModalClick}
+      />
       <ContentContainer>
         {(() => {
-          if (!challenge) {
+          if (loading) {
             //  Replace with loading screen
-            return null;
+            return (
+              <Overlay>
+                <SyncLoader size={20} color={theme.LOADER.SPINNER} />
+              </Overlay>
+            );
+          }
+
+          if (!challenge) {
+            return (
+              <Overlay>
+                <OverlayError>
+                  Error occurred while retrieving data.
+                  <Retry onClick={fetchChallenge}>Retry</Retry>
+                </OverlayError>
+              </Overlay>
+            );
           }
 
           const { wordle, attempts } = challenge;
@@ -245,8 +337,14 @@ function SolveWordle() {
           );
         })()}
       </ContentContainer>
+      <SolutionResultModal
+        show={isChallengeSolved && isModalVisible}
+        solution={solution}
+        status={storedSolution?.status}
+        onClose={handleOnModalClose}
+      />
     </Container>
   );
 }
 
-export default SolveWordle;
+export default withTheme(SolveWordle);

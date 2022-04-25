@@ -5,8 +5,12 @@ import { ThemeProvider } from "styled-components";
 
 import { store } from "./src/reducer";
 import { getSelectedThemeSelector } from "./src/selectors/ui";
-import Theme from "./src/theme";
+import Theme, { ThemeType } from "./src/theme";
 import { SolveWordle, CreateWordle, NotFound } from "./src/screens";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const Container = styled.div`
   width: 100%;
@@ -39,6 +43,11 @@ function Root() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Inner>
+          <ToastContainer
+            limit={2}
+            position="bottom-right"
+            theme={theme === ThemeType.DARK ? "dark" : "light"}
+          />
         </Container>
       </Router>
     </ThemeProvider>

@@ -47,7 +47,6 @@ const Theme = {
       BUTTON: {
         TEXT: COLORS.WHITE,
         BACKGROUND: COLORS.GRAY,
-        BACKGROUND_CLICK: COLORS.SUCCESS,
       },
     },
     BUTTON: {
@@ -58,6 +57,10 @@ const Theme = {
       SUCCESS: {
         TEXT: COLORS.WHITE,
         BACKGROUND: COLORS.SUCCESS,
+      },
+      ERROR: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.ERROR,
       },
       SPINNER: COLORS.WHITE,
     },
@@ -80,6 +83,29 @@ const Theme = {
         [KeyState.PLACED]: COLORS.SUCCESS,
         [KeyState.UNVERIFIED]: COLORS.GRAY,
       },
+    },
+    MODAL: {
+      BACKGROUND: COLORS.DARK_GRAY,
+      TEXT: COLORS.WHITE,
+    },
+    CHART: {
+      BACKGROUND: {
+        [KeyState.ABSENT]: COLORS.ERROR,
+        [KeyState.MISPLACED]: COLORS.WARNING,
+        [KeyState.PLACED]: COLORS.SUCCESS,
+      },
+      TEXT: COLORS.WHITE,
+    },
+    TOAST: {
+      PROGRESS: {
+        SUCCESS: COLORS.SUCCESS,
+        ERROR: COLORS.ERROR,
+      },
+    },
+    LOADER: {
+      SPINNER: COLORS.WHITE,
+      BACKGROUND: COLORS.BLACK,
+      TEXT: COLORS.WHITE,
     },
   },
   [ThemeType.LIGHT]: {

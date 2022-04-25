@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
+import { IoMenuOutline } from "react-icons/io5";
 
 const Container = styled.div`
-  padding: 10px;
-  padding-top: 15px;
+  padding: 10px 20px;
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${({ theme }) => css`
     background-color: ${theme.TITLE_BAR.BACKGROUND};
@@ -21,16 +22,36 @@ const Title = styled.div`
   color: ${({ theme }) => theme.TITLE_BAR.TEXT};
 `;
 
-function TitleBar({ title }) {
+const Button = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 12px;
+
+  ${({ theme, type }) =>
+    css`
+      color: ${theme.BUTTON.DEFAULT.TEXT};
+      margin-${type}: auto;
+    `};
+`;
+
+function TitleBar({ title, rightIcon, onRightIconClick }) {
   return (
     <Container>
+      <Button type="right">
+        <IoMenuOutline size={25} />
+      </Button>
       <Title>{title}</Title>
+      <Button type="left" onClick={onRightIconClick}>
+        {rightIcon}
+      </Button>
     </Container>
   );
 }
 
 TitleBar.defaultProps = {
   title: "",
+  rightIcon: null,
+  onRightIconClick: () => {},
 };
 
 export default TitleBar;
