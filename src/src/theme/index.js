@@ -19,10 +19,21 @@ export const ThemeType = {
 
 const Theme = {
   [ThemeType.DARK]: {
+    GLOBAL: {
+      BACKGROUND: COLORS.BLACK,
+    },
     TITLE_BAR: {
       BACKGROUND: COLORS.BLACK,
       TEXT: COLORS.WHITE,
       BORDER: COLORS.DARK_GRAY,
+    },
+    SIDE_BAR: {
+      BACKGROUND: COLORS.BLACK,
+      TEXT: COLORS.WHITE,
+      FOOTER: {
+        TEXT: COLORS.LIGHT_GRAY,
+        BORDER: COLORS.GRAY,
+      },
     },
     BACKDROP: {
       BACKGROUND: COLORS.BLACK,
@@ -107,17 +118,64 @@ const Theme = {
       BACKGROUND: COLORS.BLACK,
       TEXT: COLORS.WHITE,
     },
+    TOGGLE_BUTTON: COLORS.WHITE,
   },
   [ThemeType.LIGHT]: {
+    GLOBAL: {
+      BACKGROUND: COLORS.WHITE,
+    },
     TITLE_BAR: {
       BACKGROUND: COLORS.WHITE,
       TEXT: COLORS.BLACK,
+      BORDER: COLORS.DARK_GRAY,
+    },
+    SIDE_BAR: {
+      BACKGROUND: COLORS.WHITE,
+      TEXT: COLORS.BLACK,
+      FOOTER: {
+        TEXT: COLORS.DARK_GRAY,
+        BORDER: COLORS.GRAY,
+      },
     },
     BACKDROP: {
-      BACKGROUND: "",
+      BACKGROUND: COLORS.WHITE,
     },
     SCREEN: {
       BACKGROUND: COLORS.WHITE,
+    },
+    LABEL: {
+      TEXT: COLORS.BLACK,
+    },
+    INPUT: {
+      BORDER: COLORS.DARK_GRAY,
+      TEXT: COLORS.BLACK,
+      BACKGROUND: COLORS.TRANSPARENT,
+    },
+    ERROR: {
+      BACKGROUND: COLORS.ERROR,
+      TEXT: COLORS.BLACK,
+    },
+    NUMBER_PICKER: {
+      TEXT: COLORS.BLACK,
+      BUTTON: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.BLACK,
+      },
+    },
+    BUTTON: {
+      DEFAULT: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.BLACK,
+      },
+      SUCCESS: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.SUCCESS,
+      },
+      ERROR: {
+        TEXT: COLORS.WHITE,
+        BACKGROUND: COLORS.ERROR,
+      },
+      SPINNER: COLORS.WHITE,
     },
     KEYS: {
       BACKGROUND: {
@@ -132,7 +190,37 @@ const Theme = {
         [KeyState.PLACED]: COLORS.WHITE,
         [KeyState.UNVERIFIED]: COLORS.BLACK,
       },
+      BORDER: {
+        [KeyState.ABSENT]: COLORS.ERROR,
+        [KeyState.MISPLACED]: COLORS.WARNING,
+        [KeyState.PLACED]: COLORS.SUCCESS,
+        [KeyState.UNVERIFIED]: COLORS.GRAY,
+      },
     },
+    MODAL: {
+      BACKGROUND: COLORS.WHITE,
+      TEXT: COLORS.BLACK,
+    },
+    CHART: {
+      BACKGROUND: {
+        [KeyState.ABSENT]: COLORS.ERROR,
+        [KeyState.MISPLACED]: COLORS.WARNING,
+        [KeyState.PLACED]: COLORS.SUCCESS,
+      },
+      TEXT: COLORS.WHITE,
+    },
+    TOAST: {
+      PROGRESS: {
+        SUCCESS: COLORS.SUCCESS,
+        ERROR: COLORS.ERROR,
+      },
+    },
+    LOADER: {
+      SPINNER: COLORS.BLACK,
+      BACKGROUND: COLORS.WHITE,
+      TEXT: COLORS.BLACK,
+    },
+    TOGGLE_BUTTON: COLORS.GRAY,
   },
 };
 

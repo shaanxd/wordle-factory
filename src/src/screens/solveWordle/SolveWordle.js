@@ -9,23 +9,14 @@ import { withTheme } from "styled-components";
 
 import {
   Keyboard,
+  ScreenContainer,
   SolutionResultModal,
-  TitleBar,
   Wordle,
 } from "../../components";
 import { KeyMappings, KeyState, SolvedState } from "../../constants";
 import { getWordle } from "../../firebase/wordle";
 import { createSolution, updateSolution } from "../../reducer/data";
 import { getDecryptedWord } from "../../utils/encryption";
-
-const Container = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-
-  background-color: ${({ theme }) => theme.SCREEN.BACKGROUND};
-`;
 
 const Overlay = styled.div`
   position: absolute;
@@ -286,12 +277,15 @@ function SolveWordle({ theme }) {
     storedSolution?.status === SolvedState.COMPLETED_UNSUCCESSFULLY;
 
   return (
-    <Container>
-      <TitleBar
-        title="Wordlab"
-        rightIcon={isChallengeSolved && <FiBarChart2 size={25} />}
-        onRightIconClick={isChallengeSolved && handleOnModalClick}
-      />
+    <ScreenContainer
+      titleBarParams={{
+        title: "Wordlab",
+        rightIcon: isChallengeSolved && (
+          <FiBarChart2 size={25} color={theme.TITLE_BAR.TEXT} />
+        ),
+        onRightIconClick: isChallengeSolved && handleOnModalClick,
+      }}
+    >
       <ContentContainer>
         {(() => {
           if (loading) {
@@ -343,7 +337,7 @@ function SolveWordle({ theme }) {
         status={storedSolution?.status}
         onClose={handleOnModalClose}
       />
-    </Container>
+    </ScreenContainer>
   );
 }
 

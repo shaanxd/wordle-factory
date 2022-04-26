@@ -62,11 +62,11 @@ const ButtonLabel = styled.label`
 
 function CreationSuccessModal({ url, onReset, theme }) {
   function handleOnShareClick() {
-    navigator.clipboard.writeText(url);
+    navigator.clipboard.writeText(
+      `💡 Got what it takes? Try this challenge.\n\n${url}`
+    );
 
-    toast("Copied to clipboard.", {
-      progressStyle: { backgroundColor: theme.TOAST.PROGRESS.SUCCESS },
-    });
+    toast("Copied to clipboard.");
   }
 
   function handleOnReset() {

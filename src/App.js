@@ -1,7 +1,8 @@
 import { Provider as ReduxProvider, useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
+import { ToastContainer } from "react-toastify";
 
 import { store } from "./src/reducer";
 import { getSelectedThemeSelector } from "./src/selectors/ui";
@@ -10,7 +11,6 @@ import { SolveWordle, CreateWordle, NotFound } from "./src/screens";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
 
 const Container = styled.div`
   width: 100%;
@@ -27,6 +27,13 @@ const Inner = styled.div`
   flex-direction: column;
   width: 100%;
   flex: 1;
+`;
+
+const GlobalStyles = createGlobalStyle`
+  html,
+  body {
+    background-color: ${({ theme }) => theme.GLOBAL.BACKGROUND};
+  }
 `;
 
 function Root() {
@@ -47,8 +54,10 @@ function Root() {
             limit={2}
             position="bottom-right"
             theme={theme === ThemeType.DARK ? "dark" : "light"}
+            hideProgressBar
           />
         </Container>
+        <GlobalStyles />
       </Router>
     </ThemeProvider>
   );

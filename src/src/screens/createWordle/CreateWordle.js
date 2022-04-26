@@ -5,21 +5,17 @@ import * as Yup from "yup";
 import { v4 } from "uuid";
 import { SyncLoader } from "react-spinners";
 
-import { TitleBar, NumberPicker, CreationSuccessModal } from "../../components";
+import {
+  NumberPicker,
+  CreationSuccessModal,
+  ScreenContainer,
+} from "../../components";
 import { css } from "styled-components";
 import { createWordle } from "../../firebase/wordle";
 import { getEncryptedWord } from "../../utils/encryption";
 import { withTheme } from "styled-components";
 import { BsCheckLg } from "react-icons/bs";
 import { toast } from "react-toastify";
-
-const Container = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-  background-color: ${({ theme }) => theme.SCREEN.BACKGROUND};
-`;
 
 const ContentContainer = styled.div`
   display: flex;
@@ -123,9 +119,7 @@ function CreateWordle({ theme }) {
       });
       setUrl(`${window.location.origin}/wordle/${id}`);
     } catch (err) {
-      toast("Error occurred while creating the challenge.", {
-        progressStyle: { backgroundColor: theme.TOAST.PROGRESS.ERROR },
-      });
+      toast("Error occurred while creating the challenge.");
     }
     setLoading(false);
   }
@@ -140,8 +134,7 @@ function CreateWordle({ theme }) {
   }
 
   return (
-    <Container>
-      <TitleBar title="Wordlab" />
+    <ScreenContainer titleBarParams={{ title: "Wordlab" }}>
       <ContentContainer>
         <Formik
           initialValues={{ attempts: 3, wordle: "" }}
@@ -202,7 +195,7 @@ function CreateWordle({ theme }) {
         </Formik>
       </ContentContainer>
       <CreationSuccessModal url={url} onReset={handleOnReset} />
-    </Container>
+    </ScreenContainer>
   );
 }
 

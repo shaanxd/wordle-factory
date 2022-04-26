@@ -37,7 +37,6 @@ const FlipCardInner = styled.div`
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
   ${({ flipped }) =>
     flipped && `transform: rotateY(180deg);transform-delay: 2s`}

@@ -1,9 +1,10 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { IoMenuOutline } from "react-icons/io5";
+import { withTheme } from "styled-components";
+import Hamburger from "hamburger-react";
 
 const Container = styled.div`
-  padding: 10px 20px;
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,6 +16,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
+  padding-top: 10px;
   font-weight: 600;
   margin: auto;
   font-size: 2rem;
@@ -26,6 +28,9 @@ const Button = styled.button`
   background: transparent;
   border: none;
   font-size: 12px;
+  padding: 0px;
+  width: 48px;
+  height: 48px;
 
   ${({ theme, type }) =>
     css`
@@ -34,11 +39,23 @@ const Button = styled.button`
     `};
 `;
 
-function TitleBar({ title, rightIcon, onRightIconClick }) {
+function TitleBar({
+  title,
+  rightIcon,
+  onRightIconClick,
+  onMenuClick,
+  theme,
+  isSideBarOpen,
+}) {
   return (
     <Container>
-      <Button type="right">
-        <IoMenuOutline size={25} />
+      <Button type="right" onClick={onMenuClick}>
+        <Hamburger
+          toggle={isSideBarOpen}
+          onToggle={() => {}}
+          size={20}
+          color={theme.TITLE_BAR.TEXT}
+        />
       </Button>
       <Title>{title}</Title>
       <Button type="left" onClick={onRightIconClick}>
@@ -52,6 +69,8 @@ TitleBar.defaultProps = {
   title: "",
   rightIcon: null,
   onRightIconClick: () => {},
+  onMenuClick: () => {},
+  isSideBarOpen: false,
 };
 
-export default TitleBar;
+export default withTheme(TitleBar);

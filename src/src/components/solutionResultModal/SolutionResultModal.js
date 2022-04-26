@@ -69,7 +69,8 @@ const ChartItem = styled.div`
     css`
       flex: ${count};
       background-color: ${theme.CHART.BACKGROUND[status]};
-    `}
+      color: ${theme.CHART.TEXT};
+    `};
 `;
 
 const ChartItemList = styled.div`
@@ -113,17 +114,18 @@ function SolutionResultModal({ show, solution, theme, status, onClose }) {
       tried = solution.length;
     }
 
-    let result = `Wordle ${tried}/${total}\n\n`;
+    let result = `Challenge ${tried}/${total}\n\n`;
 
     result = result += solution
+      .filter((row) => row.length !== 0)
       .map((row) => row.map(({ status }) => KeyStateEmotes[status]).join(""))
       .join("\n");
 
+    result += `\n\nWanna give it a go? Visit ${window.location.href}`;
+
     navigator.clipboard.writeText(result);
 
-    toast("Copied to clipboard.", {
-      progressStyle: { backgroundColor: theme.TOAST.PROGRESS.SUCCESS },
-    });
+    toast("Copied to clipboard.");
   }
 
   const chart = useMemo(() => {
