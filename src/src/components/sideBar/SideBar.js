@@ -45,6 +45,7 @@ const Content = styled.div`
 const Footer = styled.div`
   display: flex;
   padding: 15px;
+  justify-content: space-between;
 
   ${({ theme }) => css`
     color: ${theme.SIDE_BAR.FOOTER.TEXT};
@@ -55,7 +56,6 @@ const Footer = styled.div`
 
 const FooterTag = styled.div`
   font-size: 14px;
-  margin-left: auto;
   display: flex;
 `;
 
@@ -154,6 +154,9 @@ function SideBar({ onToggle }) {
         </Row>
       </Content>
       <Footer>
+        <FooterTag>
+          <FooterLabel>v{process.env.REACT_APP_VERSION}</FooterLabel>
+        </FooterTag>
         <FooterTag>
           <IoCodeSlashOutline size={20} />
           <FooterLabel>By Shahid Hassan</FooterLabel>
