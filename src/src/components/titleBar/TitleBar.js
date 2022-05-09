@@ -22,6 +22,10 @@ const Title = styled.div`
   font-size: 2rem;
   font-family: Comfortaa;
   color: ${({ theme }) => theme.TITLE_BAR.TEXT};
+
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const Button = styled.button`

@@ -1,21 +1,19 @@
 import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { withTheme, css } from "styled-components";
 import { ErrorMessage, Field, Formik } from "formik";
 import * as Yup from "yup";
 import { v4 } from "uuid";
 import { SyncLoader } from "react-spinners";
+import { BsCheckLg } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 import {
   NumberPicker,
   CreationSuccessModal,
   ScreenContainer,
 } from "../../components";
-import { css } from "styled-components";
 import { createWordle } from "../../firebase/wordle";
 import { getEncryptedWord } from "../../utils/encryption";
-import { withTheme } from "styled-components";
-import { BsCheckLg } from "react-icons/bs";
-import { toast } from "react-toastify";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -37,13 +35,12 @@ const StyledField = styled(Field)`
   font-size: 1.2rem;
   padding: 10px 5px;
   border: none;
-  text-transform: uppercase;
 
   &:focus {
     outline: none;
   }
 
-  ${({ theme }) => css`
+  ${({ theme, uppercase }) => css`
     color: ${theme.INPUT.TEXT};
     border-bottom: 2px solid ${theme.INPUT.BORDER};
     background-color: ${theme.INPUT.BACKGROUND};
@@ -133,8 +130,14 @@ function CreateWordle({ theme }) {
     formikRef.current?.resetForm?.();
   }
 
+  function handleOnWordChange({ target: { value } }) {
+    formikRef.current?.setFieldValue(
+      "wordle",
+      value.replace(/[^A-Za-z]/gi, "")
+    );
+  }
   return (
-    <ScreenContainer titleBarParams={{ title: "Wordlab" }}>
+    <ScreenContainer titleBarParams={{ title: "Wordlabs" }}>
       <ContentContainer>
         <Formik
           initialValues={{ attempts: 3, wordle: "" }}
@@ -150,13 +153,19 @@ function CreateWordle({ theme }) {
           {({ values: { attempts }, submitForm }) => (
             <Form>
               <Subtitle>
-                Looking to challenge your friends with a brain teaser? Go ahead
-                and create a challenge. You can define the word to be guessed,
-                the no. of attempts and voila!
+                Welcome to Wordlabs! Looking to challenge your friends with a
+                brain teaser? You're in the right place! Go ahead and create a
+                challenge. You can define the word to be guessed, the no. of
+                attempts and voila!
               </Subtitle>
               <InputContainer>
                 <Label>Word*</Label>
-                <StyledField name="wordle" disabled={loading} />
+                <StyledField
+                  name="wordle"
+                  disabled={loading}
+                  onChange={handleOnWordChange}
+                  placeholder="Enter Word"
+                />
                 <ErrorMessage
                   name="wordle"
                   render={(message) => <Error>{message}</Error>}

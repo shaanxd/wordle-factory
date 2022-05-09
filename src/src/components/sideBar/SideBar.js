@@ -119,7 +119,7 @@ function SideBar({ onToggle }) {
   return (
     <Container>
       <Content>
-        <Title>More on Wordlab</Title>
+        <Title>More on Wordlabs</Title>
         <StyledLink onClick={handleOnCreateClick}>
           <RiHomeGearLine size={20} />{" "}
           <StyledLabel>Create Challenge</StyledLabel>

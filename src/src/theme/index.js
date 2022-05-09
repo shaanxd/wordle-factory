@@ -45,7 +45,7 @@ const Theme = {
       TEXT: COLORS.WHITE,
     },
     INPUT: {
-      BORDER: COLORS.DARK_GRAY,
+      BORDER: COLORS.GRAY,
       TEXT: COLORS.WHITE,
       BACKGROUND: COLORS.TRANSPARENT,
     },
@@ -118,7 +118,10 @@ const Theme = {
       BACKGROUND: COLORS.BLACK,
       TEXT: COLORS.WHITE,
     },
-    TOGGLE_BUTTON: COLORS.WHITE,
+    TOGGLE_BUTTON: {
+      DEFAULT: COLORS.WHITE,
+      CHECKED: COLORS.SUCCESS,
+    },
   },
   [ThemeType.LIGHT]: {
     GLOBAL: {
@@ -153,7 +156,7 @@ const Theme = {
     },
     ERROR: {
       BACKGROUND: COLORS.ERROR,
-      TEXT: COLORS.BLACK,
+      TEXT: COLORS.WHITE,
     },
     NUMBER_PICKER: {
       TEXT: COLORS.BLACK,
@@ -220,7 +223,10 @@ const Theme = {
       BACKGROUND: COLORS.WHITE,
       TEXT: COLORS.BLACK,
     },
-    TOGGLE_BUTTON: COLORS.GRAY,
+    TOGGLE_BUTTON: {
+      DEFAULT: COLORS.GRAY,
+      CHECKED: COLORS.SUCCESS,
+    },
   },
 };
 

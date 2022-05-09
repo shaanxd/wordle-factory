@@ -279,7 +279,7 @@ function SolveWordle({ theme }) {
   return (
     <ScreenContainer
       titleBarParams={{
-        title: "Wordlab",
+        title: "Wordlabs",
         rightIcon: isChallengeSolved && (
           <FiBarChart2 size={25} color={theme.TITLE_BAR.TEXT} />
         ),

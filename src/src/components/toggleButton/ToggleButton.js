@@ -8,8 +8,9 @@ const Container = styled.div`
   border-radius: 100px;
   padding: 2px;
 
-  ${({ theme }) => css`
-    border: 1px solid ${theme.TOGGLE_BUTTON};
+  ${({ theme, checked }) => css`
+    border: 1px solid
+      ${checked ? theme.TOGGLE_BUTTON.CHECKED : theme.TOGGLE_BUTTON.DEFAULT};
   `}
 `;
 
@@ -22,13 +23,15 @@ const Inner = styled.div`
 
   ${({ checked, theme }) => css`
     transform: translateX(${checked ? 14 : 0}px);
-    background-color: ${theme.TOGGLE_BUTTON};
+    background-color: ${checked
+      ? theme.TOGGLE_BUTTON.CHECKED
+      : theme.TOGGLE_BUTTON.DEFAULT};
   `}
 `;
 
 function ToggleButton({ checked, onToggle }) {
   return (
-    <Container onClick={onToggle}>
+    <Container onClick={onToggle} checked={checked}>
       <Inner checked={checked} />
     </Container>
   );
