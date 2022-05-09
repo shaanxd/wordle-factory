@@ -136,8 +136,11 @@ function SolveWordle({ theme }) {
       : clonedStoredSolution.findIndex((row) => row.length === 0);
 
     setSolution(JSON.parse(JSON.stringify(storedSolution.solution)));
-    setModalVisible(isChallengeSolved);
     setRow(row);
+
+    setTimeout(() => {
+      setModalVisible(isChallengeSolved);
+    }, 1000);
   }, [storedSolution]);
 
   useEffect(() => {
